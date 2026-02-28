@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "146498095118",
+    "project_id": "\nrutaceramica-fa503",
+    "storage_bucket": "rutaceramica-cd014.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146498095118:android:d7ed83519954447307d45f",
+        "android_client_info": {
+          "package_name": "com.utng.rutaceramica"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU6ynYm8zOG9PKDSsDr-GZLrJZUby_VRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
