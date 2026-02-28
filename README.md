@@ -61,7 +61,7 @@
 ---
 
 ## 👥 Autores
-- **Desarrollador**: [Tu Nombre Completo]
+- **Desarrollador**: Avalos Velazquez Fabian Karel
 - **Asignatura**: Desarrollo de Aplicaciones Móviles
 - **Institución**: Universidad Tecnológica del Norte de Guanajuato (UTNG)
 
