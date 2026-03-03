@@ -131,6 +131,23 @@ class TallerRepository {
     }
 
     /**
+     * Obtiene un taller específico por su ID.
+     */
+    suspend fun obtenerTallerPorId(idTaller: String): Result<Taller> {
+        return try {
+            val doc = talleresCol.document(idTaller).get().await()
+            if (doc.exists()) {
+                val taller = doc.toObject(Taller::class.java)!!
+                Result.success(taller)
+            } else {
+                Result.failure(Exception("Taller no encontrado"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
      * Sube una imagen al Firebase Storage en la ruta "talleres/{idTaller}/foto.jpg"
      * y retorna la URL pública de descarga.
      *

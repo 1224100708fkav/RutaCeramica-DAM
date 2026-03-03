@@ -38,7 +38,7 @@ fun FormTallerScreen(
     tallerViewModel: TallerViewModel = viewModel()
 ) {
     val esEdicion = idTaller != "nuevo"
-    val talleres by tallerViewModel.talleres.collectAsState()
+    val tallerEditado by tallerViewModel.tallerSeleccionado.collectAsState()
     val cargando by tallerViewModel.cargando.collectAsState()
     val mensaje by tallerViewModel.mensaje.collectAsState()
 
@@ -49,17 +49,18 @@ fun FormTallerScreen(
     var latitud by remember { mutableStateOf("21.1522") }
     var longitud by remember { mutableStateOf("-100.9338") }
     var telefono by remember { mutableStateOf("") }
+    var artesanoIdActual by remember { mutableStateOf(idArtesano) }
 
     // Si es edición, cargar datos del taller
     LaunchedEffect(idTaller) {
         if (esEdicion) {
-            tallerViewModel.cargarTalleresDeArtesano(idArtesano)
+            tallerViewModel.cargarTallerPorId(idTaller)
         }
     }
 
-    LaunchedEffect(talleres) {
-        if (esEdicion) {
-            talleres.find { it.idTaller == idTaller }?.let { t ->
+    LaunchedEffect(tallerEditado) {
+        if (esEdicion && tallerEditado != null) {
+            tallerEditado?.let { t ->
                 nombre = t.nombre
                 descripcion = t.descripcion
                 historia = t.historia
@@ -67,6 +68,7 @@ fun FormTallerScreen(
                 latitud = t.latitud.toString()
                 longitud = t.longitud.toString()
                 telefono = t.telefono
+                artesanoIdActual = t.idArtesano
             }
         }
     }
@@ -146,7 +148,8 @@ fun FormTallerScreen(
                         latitud = latitud.toDoubleOrNull() ?: 21.1522,
                         longitud = longitud.toDoubleOrNull() ?: -100.9338,
                         telefono = telefono,
-                        idArtesano = idArtesano
+                        idArtesano = artesanoIdActual,
+                        aprobado = tallerEditado?.aprobado ?: false // Mantener estado de aprobación
                     )
                     if (esEdicion) {
                         tallerViewModel.actualizarTaller(taller)

@@ -30,6 +30,22 @@ class TallerViewModel : ViewModel() {
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
 
+    private val _tallerSeleccionado = MutableStateFlow<Taller?>(null)
+    val tallerSeleccionado: StateFlow<Taller?> = _tallerSeleccionado
+
+    /**
+     * Carga un taller específico por su ID.
+     */
+    fun cargarTallerPorId(idTaller: String) {
+        viewModelScope.launch {
+            _cargando.value = true
+            repository.obtenerTallerPorId(idTaller)
+                .onSuccess { _tallerSeleccionado.value = it }
+                .onFailure { e -> _error.value = e.message }
+            _cargando.value = false
+        }
+    }
+
     /**
      * Carga los talleres aprobados para mostrar al Turista en el mapa y en la lista.
      */
@@ -123,14 +139,18 @@ class TallerViewModel : ViewModel() {
      * Elimina un taller de Firestore.
      *
      * @param idTaller ID del taller a eliminar.
-     * @param idArtesano UID del artesano (para recargar su lista después).
+     * @param idArtesano UID del artesano (para recargar su lista después). Si es vacío, recarga todos (Admin).
      */
     fun eliminarTaller(idTaller: String, idArtesano: String) {
         viewModelScope.launch {
             repository.eliminarTaller(idTaller)
                 .onSuccess {
                     _mensaje.value = "Taller eliminado"
-                    cargarTalleresDeArtesano(idArtesano)
+                    if (idArtesano.isEmpty()) {
+                        cargarTodosTalleres()
+                    } else {
+                        cargarTalleresDeArtesano(idArtesano)
+                    }
                 }
                 .onFailure { e -> _error.value = e.message }
         }

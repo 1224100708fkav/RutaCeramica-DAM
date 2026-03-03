@@ -46,4 +46,44 @@ class AdminRepository {
             Result.failure(e)
         }
     }
+
+    /**
+     * Crea un nuevo usuario en Firestore.
+     * Nota: El administrador crea el documento en Firestore, la autenticación
+     * se maneja por separado o el usuario deberá registrarse.
+     */
+    suspend fun crearUsuario(usuario: Usuario): Result<Usuario> {
+        return try {
+            val docRef = if (usuario.idUsuario.isEmpty()) usuariosCol.document() else usuariosCol.document(usuario.idUsuario)
+            val usuarioConId = usuario.copy(idUsuario = docRef.id)
+            docRef.set(usuarioConId).await()
+            Result.success(usuarioConId)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Actualiza los datos de un usuario existente.
+     */
+    suspend fun actualizarUsuario(usuario: Usuario): Result<Unit> {
+        return try {
+            usuariosCol.document(usuario.idUsuario).set(usuario).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Elimina un usuario de Firestore.
+     */
+    suspend fun eliminarUsuario(idUsuario: String): Result<Unit> {
+        return try {
+            usuariosCol.document(idUsuario).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

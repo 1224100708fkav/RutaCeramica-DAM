@@ -53,6 +53,54 @@ class AdminViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Crea un nuevo usuario y recarga la lista.
+     */
+    fun crearUsuario(usuario: Usuario) {
+        viewModelScope.launch {
+            _cargando.value = true
+            repository.crearUsuario(usuario)
+                .onSuccess {
+                    _mensaje.value = "Usuario creado correctamente"
+                    cargarUsuarios()
+                }
+                .onFailure { _mensaje.value = "Error al crear: ${it.message}" }
+            _cargando.value = false
+        }
+    }
+
+    /**
+     * Actualiza un usuario y recarga la lista.
+     */
+    fun actualizarUsuario(usuario: Usuario) {
+        viewModelScope.launch {
+            _cargando.value = true
+            repository.actualizarUsuario(usuario)
+                .onSuccess {
+                    _mensaje.value = "Usuario actualizado correctamente"
+                    cargarUsuarios()
+                }
+                .onFailure { _mensaje.value = "Error al actualizar: ${it.message}" }
+            _cargando.value = false
+        }
+    }
+
+    /**
+     * Elimina un usuario y recarga la lista.
+     */
+    fun eliminarUsuario(idUsuario: String) {
+        viewModelScope.launch {
+            _cargando.value = true
+            repository.eliminarUsuario(idUsuario)
+                .onSuccess {
+                    _mensaje.value = "Usuario eliminado correctamente"
+                    cargarUsuarios()
+                }
+                .onFailure { _mensaje.value = "Error al eliminar: ${it.message}" }
+            _cargando.value = false
+        }
+    }
+
     /** Limpia el mensaje actual. */
     fun limpiarMensaje() {
         _mensaje.value = null

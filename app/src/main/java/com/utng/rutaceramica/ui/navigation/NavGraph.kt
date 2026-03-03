@@ -257,7 +257,11 @@ fun NavGraph(
         }
 
         composable(Screen.AprobarTalleres.ruta) {
-            AprobarTalleresScreen(onBack = { navController.popBackStack() })
+            AprobarTalleresScreen(
+                onBack = { navController.popBackStack() },
+                onEditarTaller = { id -> navController.navigate(Screen.FormTaller.conId(id)) },
+                onNuevoTaller = { navController.navigate(Screen.FormTaller.conId("nuevo")) }
+            )
         }
 
         composable(Screen.GestionUsuarios.ruta) {
